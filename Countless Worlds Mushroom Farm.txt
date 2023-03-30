@@ -4,7 +4,7 @@ local ItemGiver3 = game:GetService("Workspace").MaterialGivers["27"]
 
 local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/cypherdh/VanisUILIB/main/.gitignore'))()
 
-local Window = library:CreateWindow("Name", "Version", 10044538000)
+local Window = library:CreateWindow("Countless Worlds", "0.0.1", 10044538000)
 
 local Tab = Window:CreateTab("Scripts")
 
