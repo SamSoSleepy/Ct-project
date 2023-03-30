@@ -1,0 +1,96 @@
+local ItemGiver1 = game:GetService("Workspace").MaterialGivers["124"]
+local ItemGiver2 = game:GetService("Workspace").MaterialGivers["125"]
+local ItemGiver3 = game:GetService("Workspace").MaterialGivers["27"]
+
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/cypherdh/VanisUILIB/main/.gitignore'))()
+
+local Window = library:CreateWindow("Name", "Version", 10044538000)
+
+local Tab = Window:CreateTab("Scripts")
+
+local Page = Tab:CreateFrame("Main")
+
+
+
+Toggle = Page:CreateToggle("Auto collect mushroom", "MushRoom", function(arg)
+Toggle:UpdateToggle("Auto collect mushroom", "MushRoom")
+_G.m = arg
+
+while _G.m do
+
+print("Play1")
+
+for i,v in pairs(ItemGiver1:GetChildren()) do
+   local Mushroom = v;
+   
+   if Mushroom:FindFirstChild("Giver") then
+       Mushroom = Mushroom.Giver
+       Mushroom.ProximityPrompt.HoldDuration = 0
+       
+       if Mushroom:FindFirstChild("ProximityPrompt") then
+       print(Mushroom.CFrame)
+            if Mushroom.CFrame.Y > 0 then
+               game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Mushroom.CFrame
+               wait(0.1)
+               fireproximityprompt(Mushroom.ProximityPrompt)
+               wait(0.1)
+            end
+         end
+    end
+end
+
+
+print("Play2")
+
+for i,v in pairs(ItemGiver2:GetChildren()) do
+   local MModel1 = v;
+   
+   if MModel1:FindFirstChild("Giver") then
+   MModel1 = MModel1.Giver
+   MModel1.ProximityPrompt.HoldDuration = 0
+   
+      if MModel1:FindFirstChild("ProximityPrompt") then
+      print(MModel1.CFrame)
+         if MModel1.CFrame.Y > 0 then
+               game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MModel1.CFrame
+               wait(0.1)
+               fireproximityprompt(MModel1.ProximityPrompt)
+               wait(0.1)
+         end
+      end
+   end
+end
+
+
+print("Play3")
+
+for i,v in pairs(ItemGiver3:GetChildren()) do
+   local MModel2 = v;
+   
+   if MModel2:FindFirstChild("Giver") then
+   MModel2 = MModel2.Giver
+   MModel2.ProximityPrompt.HoldDuration = 0
+   
+      if MModel2:FindFirstChild("ProximityPrompt") then
+      print(MModel2.CFrame)
+         if MModel2.CFrame.Y > 0 then
+               game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MModel2.CFrame
+               wait(0.1)
+               fireproximityprompt(MModel2.ProximityPrompt)
+               wait(0.1)
+         end
+      end
+   end
+end
+
+print("End")
+
+wait(5)
+end
+
+end)
+
+
+
+Label = Page:CreateLabel("Label")
+Label:UpdateLabel("Script : SamSoSleepy")
