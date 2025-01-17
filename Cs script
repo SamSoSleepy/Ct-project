@@ -1,0 +1,229 @@
+local TweenService = game:GetService("TweenService")  -- เรียกใช้ TweenService
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local StartButton = Instance.new("TextButton")
+local IncreaseButton = Instance.new("TextButton")
+local DecreaseButton = Instance.new("TextButton")
+local TimeLabel = Instance.new("TextLabel")
+local DestroyButton = Instance.new("TextButton")  -- ปุ่มใหม่สำหรับทำลาย GUI
+local SkillMenuButton = Instance.new("TextButton")  -- ปุ่มเปิดเมนูเลือกสกิล
+local SkillMenuFrame = Instance.new("Frame")  -- กรอบเมนูเลือกสกิล
+local SkillAnchorButton = Instance.new("TextButton")  -- ปุ่มเลือก Anchor
+local SkillMurasamaButton = Instance.new("TextButton")  -- ปุ่มเลือก Murasama
+local CurrentSkill = "Anchor"  -- ตัวแปรเก็บสกิลที่กำลังใช้
+
+-- ตั้งชื่อ GUI และเพิ่มเข้าไปใน CoreGui
+ScreenGui.Name = "CustomSkillGui"
+ScreenGui.Parent = game.CoreGui
+
+-- ตั้งค่ากรอบหลัก
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 220, 0, 150)
+MainFrame.Position = UDim2.new(1, -230, 0.5, -75)
+MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+MainFrame.Active = true -- ทำให้สามารถลากได้
+MainFrame.Draggable = true -- เปิดใช้งานการลาก
+
+-- ปุ่มเริ่ม/หยุด
+StartButton.Parent = MainFrame
+StartButton.Size = UDim2.new(0, 200, 0, 40)
+StartButton.Position = UDim2.new(0, 10, 0, 10)
+StartButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+StartButton.Text = "Start Anchor Skill"
+StartButton.TextSize = 16
+StartButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเพิ่มเวลา
+IncreaseButton.Parent = MainFrame
+IncreaseButton.Size = UDim2.new(0, 90, 0, 40)
+IncreaseButton.Position = UDim2.new(0, 10, 0, 60)
+IncreaseButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+IncreaseButton.Text = "+ Time"
+IncreaseButton.TextSize = 18
+IncreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มลดเวลา
+DecreaseButton.Parent = MainFrame
+DecreaseButton.Size = UDim2.new(0, 90, 0, 40)
+DecreaseButton.Position = UDim2.new(0, 110, 0, 60)
+DecreaseButton.BackgroundColor3 = Color3.fromRGB(200, 0, 100)
+DecreaseButton.Text = "- Time"
+DecreaseButton.TextSize = 18
+DecreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- แสดงเวลาปัจจุบัน
+TimeLabel.Parent = MainFrame
+TimeLabel.Size = UDim2.new(0, 200, 0, 30)
+TimeLabel.Position = UDim2.new(0, 10, 0, 110)
+TimeLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TimeLabel.Text = "Skill Interval: 1.0s"
+TimeLabel.TextSize = 18
+TimeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มทำลาย GUI
+DestroyButton.Parent = ScreenGui  -- เปลี่ยนให้เป็น ScreenGui แทน MainFrame
+DestroyButton.Size = UDim2.new(0, 150, 0, 40)
+DestroyButton.Position = UDim2.new(1, -160, 0, 10)  -- ตำแหน่งขวาบน
+DestroyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+DestroyButton.Text = "Destroy GUI"
+DestroyButton.TextSize = 20
+DestroyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเปิดเมนูเลือกสกิล
+SkillMenuButton.Parent = MainFrame
+SkillMenuButton.Size = UDim2.new(0, 200, 0, 40)
+SkillMenuButton.Position = UDim2.new(0, 10, 0, 160)
+SkillMenuButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+SkillMenuButton.Text = "Select Skill"
+SkillMenuButton.TextSize = 18
+SkillMenuButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- กรอบเมนูเลือกสกิล
+SkillMenuFrame.Parent = MainFrame
+SkillMenuFrame.Size = UDim2.new(0, 200, 0, 80)
+SkillMenuFrame.Position = UDim2.new(0, 10, 0, 200)
+SkillMenuFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SkillMenuFrame.Visible = false  -- ซ่อนไว้ก่อนจนกว่าจะกดเปิด
+
+-- ปุ่มเลือก Anchor
+SkillAnchorButton.Parent = SkillMenuFrame
+SkillAnchorButton.Size = UDim2.new(0, 200, 0, 40)
+SkillAnchorButton.Position = UDim2.new(0, 0, 0, 0)
+SkillAnchorButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+SkillAnchorButton.Text = "Anchor"
+SkillAnchorButton.TextSize = 16
+SkillAnchorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเลือก Murasama
+SkillMurasamaButton.Parent = SkillMenuFrame
+SkillMurasamaButton.Size = UDim2.new(0, 200, 0, 40)
+SkillMurasamaButton.Position = UDim2.new(0, 0, 0, 40)
+SkillMurasamaButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+SkillMurasamaButton.Text = "Murasama"
+SkillMurasamaButton.TextSize = 16
+SkillMurasamaButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ตัวแปรสถานะและเวลา
+local isRunning = false
+local loop
+local skillInterval = 1.0 -- ตั้งค่าเริ่มต้นของเวลารอบ (หน่วยวินาที)
+
+-- ฟังก์ชันหลัก
+local function mainLoop()
+    while isRunning do
+        print(CurrentSkill .. " is running...")
+
+        -- รันสกิลที่เลือก (เช่น Anchor หรือ Murasama)
+        local skill
+        if CurrentSkill == "Anchor" then
+            skill = game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities"):WaitForChild("Anchor")
+        elseif CurrentSkill == "Murasama" then
+            skill = game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities"):WaitForChild("Murasama")
+        end
+
+        local args = {
+            [1] = skill
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Ability"):FireServer(unpack(args))
+        print(CurrentSkill .. " Activated!")
+
+        wait(skillInterval) -- ใช้เวลารอบที่ปรับได้
+    end
+end
+
+-- ฟังก์ชันเมื่อปุ่มเริ่ม/หยุดถูกกด
+StartButton.MouseButton1Click:Connect(function()
+    if not isRunning then
+        -- เปิดการทำงาน
+        isRunning = true
+        StartButton.Text = "Stop " .. CurrentSkill .. " Skill"
+        
+        -- ทำอนิเมชันให้ปุ่ม Start
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
+        local goal = {BackgroundColor3 = Color3.fromRGB(255, 0, 0)}
+        local tween = TweenService:Create(StartButton, tweenInfo, goal)
+        tween:Play()
+
+        loop = coroutine.create(mainLoop)
+        coroutine.resume(loop)
+    else
+        -- ปิดการทำงาน
+        isRunning = false
+        StartButton.Text = "Start " .. CurrentSkill .. " Skill"
+        
+        -- ทำอนิเมชันให้ปุ่ม Start
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
+        local goal = {BackgroundColor3 = Color3.fromRGB(0, 170, 255)}
+        local tween = TweenService:Create(StartButton, tweenInfo, goal)
+        tween:Play()
+
+        print(CurrentSkill .. " Stopped!")
+    end
+end)
+
+-- ฟังก์ชันเพิ่มเวลา
+IncreaseButton.MouseButton1Click:Connect(function()
+    skillInterval = skillInterval + 0.1
+    TimeLabel.Text = string.format("Skill Interval: %.1fs", skillInterval)
+
+    -- ทำอนิเมชันเมื่อเพิ่มเวลา
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
+    local goal = {BackgroundColor3 = Color3.fromRGB(0, 200, 100)}
+    local tween = TweenService:Create(IncreaseButton, tweenInfo, goal)
+    tween:Play()
+end)
+
+-- ฟังก์ชันลดเวลา
+DecreaseButton.MouseButton1Click:Connect(function()
+    if skillInterval > 0.1 then -- ห้ามลดต่ำกว่า 0.1 วินาที
+        skillInterval = skillInterval - 0.1
+        TimeLabel.Text = string.format("Skill Interval: %.1fs", skillInterval)
+
+        -- ทำอนิเมชันเมื่อลดเวลา
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
+        local goal = {BackgroundColor3 = Color3.fromRGB(200, 0, 100)}
+        local tween = TweenService:Create(DecreaseButton, tweenInfo, goal)
+        tween:Play()
+    end
+end)
+
+-- ฟังก์ชันลบ GUI
+DestroyButton.MouseButton1Click:Connect(function()
+    -- ทำอนิเมชันให้ปุ่ม Destroy ก่อนจะทำลาย GUI
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
+    local goal = {BackgroundColor3 = Color3.fromRGB(0, 0, 0)}
+    local tween = TweenService:Create(DestroyButton, tweenInfo, goal)
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        ScreenGui:Destroy()  -- ลบ ScreenGui ทิ้ง
+        print("GUI Destroyed!")
+    end)
+end)
+
+-- ฟังก์ชันเปิด/ปิดเมนูเลือกสกิล
+SkillMenuButton.MouseButton1Click:Connect(function()
+    SkillMenuFrame.Visible = not SkillMenuFrame.Visible  -- สลับสถานะการแสดงเมนู
+    
+    -- ทำอนิเมชันเมื่อเปิด/ปิดเมนู
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    local goal = {Size = SkillMenuFrame.Visible and UDim2.new(0, 200, 0, 80) or UDim2.new(0, 0, 0, 80)}
+    local tween = TweenService:Create(SkillMenuFrame, tweenInfo, goal)
+    tween:Play()
+end)
+
+-- ฟังก์ชันเลือกสกิล Anchor
+SkillAnchorButton.MouseButton1Click:Connect(function()
+    CurrentSkill = "Anchor"
+    StartButton.Text = "Start Anchor Skill"
+    SkillMenuFrame.Visible = false  -- ซ่อนเมนูหลังเลือกสกิล
+    print("Current Skill: Anchor")
+end)
+
+-- ฟังก์ชันเลือกสกิล Murasama
+SkillMurasamaButton.MouseButton1Click:Connect(function()
+    CurrentSkill = "Murasama"
+    StartButton.Text = "Start Murasama Skill"
+    SkillMenuFrame.Visible = false  -- ซ่อนเมนูหลังเลือกสกิล
+    print("Current Skill: Murasama")
+end)
