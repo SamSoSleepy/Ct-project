@@ -1,0 +1,69 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local localPlayer = Players.LocalPlayer
+local workspace = game:GetService("Workspace")
+local survivorsFolder = workspace:FindFirstChild("Players"):FindFirstChild("Survivors")
+
+local aimlockEnabled = false
+local currentTarget = nil
+
+-- สร้าง UI
+local screenGui = Instance.new("ScreenGui", localPlayer.PlayerGui)
+local toggleButton = Instance.new("TextButton", screenGui)
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(1, -110, 0, 10)
+toggleButton.Text = "Toggle Aimlock"
+
+local targetLabel = Instance.new("TextLabel", screenGui)
+targetLabel.Size = UDim2.new(0, 200, 0, 50)
+targetLabel.Position = UDim2.new(1, -220, 0, 70)
+targetLabel.Text = "Target: None"
+
+-- ฟังก์ชันเพื่อหาผู้รอดชีวิตที่ใกล้ที่สุด
+local function getClosestSurvivor()
+    local closestDistance = math.huge
+    local closestSurvivor = nil
+
+    for _, survivor in ipairs(survivorsFolder:GetChildren()) do
+        if survivor:IsA("Model") then
+            local survivorPrimaryPart = survivor:FindFirstChild("HumanoidRootPart")
+            if survivorPrimaryPart then
+                local distance = (localPlayer.Character.HumanoidRootPart.Position - survivorPrimaryPart.Position).Magnitude
+                if distance < closestDistance then
+                    closestDistance = distance
+                    closestSurvivor = survivor
+                end
+            end
+        end
+    end
+    
+    return closestSurvivor
+end
+
+-- ฟังก์ชัน Aimlock
+local function aimAtClosestSurvivor()
+    if aimlockEnabled then
+        local closestSurvivor = getClosestSurvivor()
+        if closestSurvivor then
+            local humanoidRootPart = closestSurvivor:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                localPlayer.Character.HumanoidRootPart.CFrame = CFrame.lookAt(localPlayer.Character.HumanoidRootPart.Position, humanoidRootPart.Position)
+                currentTarget = closestSurvivor.Name
+                targetLabel.Text = "Target: " .. currentTarget
+            end
+        else
+            targetLabel.Text = "Target: None"
+        end
+    else
+        targetLabel.Text = "Target: None"
+    end
+end
+
+-- การเปิด-ปิด Aimlock
+toggleButton.MouseButton1Click:Connect(function()
+    aimlockEnabled = not aimlockEnabled
+    toggleButton.Text = aimlockEnabled and "Disable Aimlock" or "Enable Aimlock"
+end)
+
+-- ใช้ RenderStepped เพื่อเรียกฟังก์ชัน Aimlock
+RunService.RenderStepped:Connect(aimAtClosestSurvivor)
