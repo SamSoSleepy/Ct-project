@@ -1,0 +1,69 @@
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+local camera = workspace.CurrentCamera
+local killersFolder = workspace.Players.Killers
+
+local aimlockEnabled = true
+local closestKiller = nil
+
+-- Create UI elements
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(1, -110, 0, 10)
+toggleButton.Text = "Toggle Aimlock"
+toggleButton.Parent = screenGui
+
+local modelNameLabel = Instance.new("TextLabel")
+modelNameLabel.Size = UDim2.new(0, 200, 0, 50)
+modelNameLabel.Position = UDim2.new(1, -210, 0, 70)
+modelNameLabel.Text = "No Target"
+modelNameLabel.TextColor3 = Color3.new(1, 1, 1)
+modelNameLabel.BackgroundTransparency = 1
+modelNameLabel.Parent = screenGui
+
+local function getClosestKiller()
+    local closestDistance = math.huge
+    closestKiller = nil
+
+    for _, killer in ipairs(killersFolder:GetChildren()) do
+        if killer:IsA("Model") and killer:FindFirstChild("HumanoidRootPart") then
+            local distance = (character.HumanoidRootPart.Position - killer.HumanoidRootPart.Position).magnitude
+            if distance < closestDistance then
+                closestDistance = distance
+                closestKiller = killer
+            end
+        end
+    end
+
+    if closestKiller then
+        modelNameLabel.Text = closestKiller.Name
+    else
+        modelNameLabel.Text = "No Target"
+    end
+end
+
+local function updateAimLock()
+    if aimlockEnabled and closestKiller and closestKiller:FindFirstChild("HumanoidRootPart") then
+        local killerPosition = closestKiller.HumanoidRootPart.Position
+        local direction = (killerPosition - character.HumanoidRootPart.Position).unit
+        local newCFrame = CFrame.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.Position + direction)
+        character.HumanoidRootPart.CFrame = newCFrame
+    end
+end
+
+toggleButton.MouseButton1Click:Connect(function()
+    aimlockEnabled = not aimlockEnabled
+    toggleButton.Text = aimlockEnabled and "Disable Aimlock" or "Enable Aimlock"
+end)
+
+killersFolder.ChildAdded:Connect(getClosestKiller)
+killersFolder.ChildRemoved:Connect(getClosestKiller)
+
+RunService.RenderStepped:Connect(updateAimLock)
+
+-- Initial setup
+getClosestKiller()
