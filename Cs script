@@ -1,2 +1,210 @@
-local v0=game:GetService("TweenService");local v1=Instance.new("ScreenGui");local v2=Instance.new("Frame");local v3=Instance.new("TextButton");local v4=Instance.new("TextButton");local v5=Instance.new("TextButton");local v6=Instance.new("TextLabel");local v7=Instance.new("TextButton");local v8=Instance.new("TextButton");local v9=Instance.new("Frame");local v10=Instance.new("TextButton");local v11=Instance.new("TextButton");local v12="Anchor";v1.Name="CustomSkillGui";v1.Parent=game.CoreGui;v2.Parent=v1;v2.Size=UDim2.new(0 + 0 ,1105 -(261 + 624) ,0 -0 ,150);v2.Position=UDim2.new(1081 -(1020 + 60) , -230,1423.5 -(630 + 793) , -(253 -178));v2.BackgroundColor3=Color3.fromRGB(236 -186 ,20 + 30 ,50);v2.Active=true;v2.Draggable=true;v3.Parent=v2;v3.Size=UDim2.new(0 -0 ,200,1747 -(760 + 987) ,1953 -(1789 + 124) );v3.Position=UDim2.new(766 -(745 + 21) ,4 + 6 ,0 -0 ,39 -29 );v3.BackgroundColor3=Color3.fromRGB(0 + 0 ,134 + 36 ,255);v3.Text="Start Anchor Skill";v3.TextSize=16;v3.TextColor3=Color3.fromRGB(1310 -(87 + 968) ,255,1122 -867 );v4.Parent=v2;v4.Size=UDim2.new(0 + 0 ,203 -113 ,0,1453 -(447 + 966) );v4.Position=UDim2.new(0,27 -17 ,1817 -(1703 + 114) ,761 -(376 + 325) );v4.BackgroundColor3=Color3.fromRGB(0 -0 ,200,307 -207 );v4.Text="+ Time";v4.TextSize=6 + 12 ;v4.TextColor3=Color3.fromRGB(255,561 -306 ,255);v5.Parent=v2;v5.Size=UDim2.new(14 -(9 + 5) ,466 -(85 + 291) ,1265 -(243 + 1022) ,152 -112 );v5.Position=UDim2.new(0 + 0 ,1290 -(1123 + 57) ,0,49 + 11 );v5.BackgroundColor3=Color3.fromRGB(454 -(163 + 91) ,1930 -(1869 + 61) ,100);v5.Text="- Time";v5.TextSize=18;v5.TextColor3=Color3.fromRGB(255,72 + 183 ,897 -642 );v6.Parent=v2;v6.Size=UDim2.new(0 -0 ,28 + 172 ,0 -0 ,30);v6.Position=UDim2.new(0,10 + 0 ,1474 -(1329 + 145) ,1081 -(140 + 831) );v6.BackgroundColor3=Color3.fromRGB(1880 -(1409 + 441) ,748 -(15 + 703) ,14 + 16 );v6.Text="Skill Interval: 1.0s";v6.TextSize=456 -(262 + 176) ;v6.TextColor3=Color3.fromRGB(255,1976 -(345 + 1376) ,943 -(198 + 490) );v7.Parent=v1;v7.Size=UDim2.new(0,150,0 -0 ,95 -55 );v7.Position=UDim2.new(1, -160,1206 -(696 + 510) ,20 -10 );v7.BackgroundColor3=Color3.fromRGB(255,1262 -(1091 + 171) ,0);v7.Text="Destroy GUI";v7.TextSize=4 + 16 ;v7.TextColor3=Color3.fromRGB(802 -547 ,845 -590 ,255);v8.Parent=v2;v8.Size=UDim2.new(374 -(123 + 251) ,993 -793 ,0,738 -(208 + 490) );v8.Position=UDim2.new(0,1 + 9 ,0 + 0 ,160);v8.BackgroundColor3=Color3.fromRGB(1091 -(660 + 176) ,255,0 + 0 );v8.Text="Select Skill";v8.TextSize=220 -(14 + 188) ;v8.TextColor3=Color3.fromRGB(675 -(534 + 141) ,0 + 0 ,0 + 0 );v9.Parent=v2;v9.Size=UDim2.new(0 + 0 ,420 -220 ,0,127 -47 );v9.Position=UDim2.new(0 -0 ,6 + 4 ,0 + 0 ,596 -(115 + 281) );v9.BackgroundColor3=Color3.fromRGB(50,116 -66 ,42 + 8 );v9.Visible=false;v10.Parent=v9;v10.Size=UDim2.new(0 -0 ,733 -533 ,867 -(550 + 317) ,57 -17 );v10.Position=UDim2.new(0 -0 ,0,0 -0 ,285 -(134 + 151) );v10.BackgroundColor3=Color3.fromRGB(1665 -(970 + 695) ,324 -154 ,255);v10.Text="Anchor";v10.TextSize=2006 -(582 + 1408) ;v10.TextColor3=Color3.fromRGB(255,884 -629 ,320 -65 );v11.Parent=v9;v11.Size=UDim2.new(0 -0 ,2024 -(1195 + 629) ,0 -0 ,281 -(187 + 54) );v11.Position=UDim2.new(780 -(162 + 618) ,0 + 0 ,0 + 0 ,85 -45 );v11.BackgroundColor3=Color3.fromRGB(428 -173 ,165,0);v11.Text="Murasama";v11.TextSize=2 + 14 ;v11.TextColor3=Color3.fromRGB(1891 -(1373 + 263) ,255,1255 -(451 + 549) );local v83=false;local v84;local v85=1 + 0 ;local function v86() while v83 do local v101=0 -0 ;local v102;local v103;local v104;while true do if (v101==0) then v102=0;v103=nil;v101=1;end if (v101==(1 -0)) then v104=nil;while true do if (v102==(1384 -(746 + 638))) then print(v12   .. " is running..." );v103=nil;v102=1;end if ((1 + 0)==v102) then if (v12=="Anchor") then v103=game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities"):WaitForChild("Anchor");elseif (v12=="Murasama") then v103=game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities"):WaitForChild("Murasama");end v104={[1]=v103};v102=2 -0 ;end if (v102==(343 -(218 + 123))) then game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Ability"):FireServer(unpack(v104));print(v12   .. " Activated!" );v102=3;end if (3==v102) then wait(v85);break;end end break;end end end end v3.MouseButton1Click:Connect(function() if  not v83 then local v105=1581 -(1535 + 46) ;local v106;local v107;local v108;while true do if (v105==1) then local v124=0 + 0 ;while true do if (v124==(1 + 0)) then v105=2;break;end if (v124==(560 -(306 + 254))) then v106=TweenInfo.new(0.5 + 0 ,Enum.EasingStyle.Bounce,Enum.EasingDirection.Out);v107={BackgroundColor3=Color3.fromRGB(255,0 -0 ,0)};v124=1468 -(899 + 568) ;end end end if (v105==0) then v83=true;v3.Text="Stop "   .. v12   .. " Skill" ;v105=1 + 0 ;end if (v105==(7 -4)) then v84=coroutine.create(v86);coroutine.resume(v84);break;end if (v105==(605 -(268 + 335))) then v108=v0:Create(v3,v106,v107);v108:Play();v105=3;end end else local v109=290 -(60 + 230) ;local v110;local v111;local v112;while true do if (v109==3) then print(v12   .. " Stopped!" );break;end if ((573 -(426 + 146))==v109) then v110=TweenInfo.new(0.5,Enum.EasingStyle.Bounce,Enum.EasingDirection.Out);v111={BackgroundColor3=Color3.fromRGB(0 + 0 ,170,1711 -(282 + 1174) )};v109=813 -(569 + 242) ;end if (2==v109) then v112=v0:Create(v3,v110,v111);v112:Play();v109=8 -5 ;end if (v109==0) then v83=false;v3.Text="Start "   .. v12   .. " Skill" ;v109=1 + 0 ;end end end end);v4.MouseButton1Click:Connect(function() local v87=0;local v88;local v89;local v90;while true do if (v87==(1026 -(706 + 318))) then v90=v0:Create(v4,v88,v89);v90:Play();break;end if (v87==1) then local v117=1251 -(721 + 530) ;while true do if (v117==0) then v88=TweenInfo.new(1271.5 -(945 + 326) ,Enum.EasingStyle.Elastic,Enum.EasingDirection.Out);v89={BackgroundColor3=Color3.fromRGB(0,499 -299 ,89 + 11 )};v117=701 -(271 + 429) ;end if (1==v117) then v87=2 + 0 ;break;end end end if (v87==(1500 -(1408 + 92))) then v85=v85 + (1086.1 -(461 + 625)) ;v6.Text=string.format("Skill Interval: %.1fs",v85);v87=1289 -(993 + 295) ;end end end);v5.MouseButton1Click:Connect(function() if (v85>(0.1 + 0)) then local v113=0;local v114;local v115;local v116;while true do if (v113==(1172 -(418 + 753))) then v114=TweenInfo.new(0.5 + 0 ,Enum.EasingStyle.Elastic,Enum.EasingDirection.Out);v115={BackgroundColor3=Color3.fromRGB(21 + 179 ,0,30 + 70 )};v113=2;end if (v113==(0 + 0)) then v85=v85-0.1 ;v6.Text=string.format("Skill Interval: %.1fs",v85);v113=1;end if ((531 -(406 + 123))==v113) then v116=v0:Create(v5,v114,v115);v116:Play();break;end end end end);v7.MouseButton1Click:Connect(function() local v91=1769 -(1749 + 20) ;local v92;local v93;local v94;while true do if (v91==(1 + 0)) then v94=v0:Create(v7,v92,v93);v94:Play();v91=2;end if (v91==(1322 -(1249 + 73))) then v92=TweenInfo.new(0.5 + 0 ,Enum.EasingStyle.Circular,Enum.EasingDirection.Out);v93={BackgroundColor3=Color3.fromRGB(1145 -(466 + 679) ,0,0 -0 )};v91=2 -1 ;end if (v91==(1902 -(106 + 1794))) then v94.Completed:Connect(function() v1:Destroy();print("GUI Destroyed!");end);break;end end end);v8.MouseButton1Click:Connect(function() local v95=0;local v96;local v97;local v98;while true do if (v95==(1 + 0)) then v97={Size=(v9.Visible and UDim2.new(0,51 + 149 ,0 -0 ,216 -136 )) or UDim2.new(0,0,114 -(4 + 110) ,664 -(57 + 527) ) };v98=v0:Create(v9,v96,v97);v95=1429 -(41 + 1386) ;end if ((103 -(17 + 86))==v95) then v9.Visible= not v9.Visible;v96=TweenInfo.new(0.5,Enum.EasingStyle.Quart,Enum.EasingDirection.Out);v95=1 + 0 ;end if (v95==2) then v98:Play();break;end end end);v10.MouseButton1Click:Connect(function() local v99=0;while true do if ((0 -0)==v99) then v12="Anchor";v3.Text="Start Anchor Skill";v99=2 -1 ;end if ((167 -(122 + 44))==v99) then v9.Visible=false;print("Current Skill: Anchor");break;end end end);v11.MouseButton1Click:Connect(function() local v100=0;while true do if (v100==(1 -0)) then v9.Visible=false;print("Current Skill: Murasama");break;end if (v100==0) then v12="Murasama";v3.Text="Start Murasama Skill";v100=3 -2 ;end end end);
--- โ ๏ธ WARNING: integrity protected!
+local TweenService = game:GetService("TweenService")  -- เรียกใช้ TweenService
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local StartButton = Instance.new("TextButton")
+local IncreaseButton = Instance.new("TextButton")
+local DecreaseButton = Instance.new("TextButton")
+local TimeLabel = Instance.new("TextLabel")
+local DestroyButton = Instance.new("TextButton")  -- ปุ่มใหม่สำหรับทำลาย GUI
+local SkillMenuButton = Instance.new("TextButton")  -- ปุ่มเปิดเมนูเลือกสกิล
+local SkillMenuFrame = Instance.new("Frame")  -- กรอบเมนูเลือกสกิล
+local CurrentSkill = ""  -- ตัวแปรเก็บสกิลที่กำลังใช้
+local isSkillActive = false  -- ตัวแปรเช็คว่า สกิลกำลังทำงานอยู่หรือไม่
+local skillTimer = 1.0  -- เวลาเริ่มต้นของสกิล (เป็นวินาที)
+local skillCoroutine = nil  -- ใช้ในการจัดการ Coroutine ของการทำงานของสกิล
+
+-- ตั้งชื่อ GUI และเพิ่มเข้าไปใน CoreGui
+ScreenGui.Name = "CustomSkillGui"
+ScreenGui.Parent = game.CoreGui
+
+-- ตั้งค่ากรอบหลัก (ขนาดแคบลง)
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 250, 0, 180)  -- ทำให้ MainFrame แคบลงมากขึ้น
+MainFrame.Position = UDim2.new(1, -260, 0.5, -90)  -- ปรับตำแหน่งให้สวยงามขึ้น
+MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+MainFrame.Active = true -- ทำให้สามารถลากได้
+MainFrame.Draggable = true -- เปิดใช้งานการลาก
+
+-- ปุ่มเริ่ม/หยุด (ลดขนาด)
+StartButton.Parent = MainFrame
+StartButton.Size = UDim2.new(0, 220, 0, 30)  -- ลดขนาดปุ่มเริ่ม
+StartButton.Position = UDim2.new(0, 15, 0, 10)
+StartButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+StartButton.Text = "Select Skill"
+StartButton.TextSize = 14
+StartButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเพิ่มเวลา (ลดขนาด)
+IncreaseButton.Parent = MainFrame
+IncreaseButton.Size = UDim2.new(0, 105, 0, 30)  -- ลดขนาดปุ่มเพิ่มเวลา
+IncreaseButton.Position = UDim2.new(0, 15, 0, 50)
+IncreaseButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+IncreaseButton.Text = "+ Time"
+IncreaseButton.TextSize = 14
+IncreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มลดเวลา (ลดขนาด)
+DecreaseButton.Parent = MainFrame
+DecreaseButton.Size = UDim2.new(0, 105, 0, 30)  -- ลดขนาดปุ่มลดเวลา
+DecreaseButton.Position = UDim2.new(0, 130, 0, 50)
+DecreaseButton.BackgroundColor3 = Color3.fromRGB(200, 0, 100)
+DecreaseButton.Text = "- Time"
+DecreaseButton.TextSize = 14
+DecreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- แสดงเวลาปัจจุบัน (ลดขนาด)
+TimeLabel.Parent = MainFrame
+TimeLabel.Size = UDim2.new(0, 220, 0, 25)  -- ลดขนาด TimeLabel
+TimeLabel.Position = UDim2.new(0, 15, 0, 90)
+TimeLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TimeLabel.Text = "Skill Interval: 1.0s"
+TimeLabel.TextSize = 14
+TimeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มทำลาย GUI (ย้ายไปขวาบน)
+DestroyButton.Parent = ScreenGui  -- เปลี่ยนให้เป็น ScreenGui แทน MainFrame
+DestroyButton.Size = UDim2.new(0, 30, 0, 30)  -- ขนาดปุ่มทำลายเล็กลง
+DestroyButton.Position = UDim2.new(1, -35, 0, 10)  -- ตำแหน่งขวาบน
+DestroyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+DestroyButton.Text = "X"  -- เปลี่ยนชื่อปุ่มเป็น "X"
+DestroyButton.TextSize = 16
+DestroyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเปิดเมนูเลือกสกิล (ลดขนาด)
+SkillMenuButton.Parent = MainFrame
+SkillMenuButton.Size = UDim2.new(0, 220, 0, 30)  -- ลดขนาดปุ่มเลือกสกิล
+SkillMenuButton.Position = UDim2.new(0, 15, 0, 130)
+SkillMenuButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+SkillMenuButton.Text = "Select Skill"
+SkillMenuButton.TextSize = 14
+SkillMenuButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- กรอบเมนูเลือกสกิล (ใช้ ScrollingFrame) (ลดขนาด)
+local ScrollFrame = Instance.new("ScrollingFrame")
+ScrollFrame.Parent = MainFrame
+ScrollFrame.Size = UDim2.new(0, 220, 0, 70)  -- ลดขนาด ScrollFrame
+ScrollFrame.Position = UDim2.new(0, 15, 0, 160)
+ScrollFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)  -- ขนาดเนื้อหาที่จะเลื่อน
+ScrollFrame.ScrollBarThickness = 8
+ScrollFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+ScrollFrame.Visible = false  -- ซ่อน ScrollFrame ในตอนเริ่มต้น
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = ScrollFrame
+UIListLayout.Padding = UDim.new(0, 4)  -- ระยะห่างระหว่างปุ่ม
+
+-- ฟังก์ชันโหลดปุ่มสกิล
+local function loadSkillButtons()
+    -- ลบปุ่มทั้งหมดใน ScrollFrame
+    for _, button in pairs(ScrollFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            button:Destroy()
+        end
+    end
+
+    -- ดึงข้อมูลสกิลจาก ReplicatedStorage
+    local playerAbilities = game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities")
+
+    -- สร้างปุ่มสำหรับสกิลทุกตัว
+    for _, ability in pairs(playerAbilities:GetChildren()) do
+        local skillButton = Instance.new("TextButton")
+        skillButton.Parent = ScrollFrame
+        skillButton.Size = UDim2.new(0, 200, 0, 30)  -- ลดขนาดปุ่มสกิล
+        skillButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+        skillButton.Text = ability.Name
+        skillButton.TextSize = 14
+        skillButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        -- เมื่อคลิกปุ่มให้เลือกสกิลนั้น
+        skillButton.MouseButton1Click:Connect(function()
+            CurrentSkill = ability.Name
+            StartButton.Text = "Start " .. CurrentSkill .. " Skill"
+            ScrollFrame.Visible = false  -- ซ่อนเมนูหลังเลือกสกิล
+            print("Current Skill: " .. CurrentSkill)
+        end)
+    end
+
+    -- อัพเดตขนาดของ CanvasSize ให้พอดีกับจำนวนปุ่มที่เพิ่มขึ้น
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, #playerAbilities:GetChildren() * 40)  -- 40 คือความสูงของแต่ละปุ่ม
+end
+
+-- ฟังก์ชันเปิด/ปิดเมนูเลือกสกิล
+SkillMenuButton.MouseButton1Click:Connect(function()
+    -- โหลดปุ่มสกิลใหม่ทุกครั้งที่เปิดเมนู
+    loadSkillButtons()
+
+    -- สลับสถานะการแสดงเมนู
+    ScrollFrame.Visible = not ScrollFrame.Visible
+
+    -- ทำอนิเมชันเมื่อเปิด/ปิดเมนู
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    local goal = {Size = ScrollFrame.Visible and UDim2.new(0, 220, 0, 70) or UDim2.new(0, 0, 0, 70)}
+    local tween = TweenService:Create(ScrollFrame, tweenInfo, goal)
+    tween:Play()
+end)
+
+-- ฟังก์ชันเริ่ม/หยุดการทำงานของสกิล
+StartButton.MouseButton1Click:Connect(function()
+    if isSkillActive then
+        -- หยุดการทำงานของสกิล
+        isSkillActive = false
+        StartButton.Text = "Start " .. CurrentSkill .. " Skill"  -- เปลี่ยนข้อความปุ่มกลับ
+        if skillCoroutine then
+            coroutine.close(skillCoroutine)  -- หยุด Coroutine ของการทำงานของสกิล
+        end
+    else
+        -- เริ่มการทำงานของสกิล
+        if CurrentSkill == "" then
+            print("No skill selected!")
+            return
+        end
+
+        -- สั่งให้สกิลทำงาน
+        isSkillActive = true
+        StartButton.Text = "Stop " .. CurrentSkill .. " Skill"  -- เปลี่ยนข้อความปุ่ม
+
+        -- ฟังก์ชันที่ทำงานซ้ำ
+        skillCoroutine = coroutine.create(function()
+            while isSkillActive do
+                -- สั่งให้สกิลทำงาน
+                local args = {
+                    [1] = game:GetService("ReplicatedStorage"):WaitForChild("PlayerAbilities"):WaitForChild(CurrentSkill)
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Ability"):FireServer(unpack(args))
+
+                -- รอเวลาที่กำหนดแล้วทำงานต่อ
+                wait(skillTimer)
+            end
+        end)
+        coroutine.resume(skillCoroutine)
+    end
+end)
+
+-- ฟังก์ชันปรับเวลา
+IncreaseButton.MouseButton1Click:Connect(function()
+    skillTimer = skillTimer + 0.5  -- เพิ่มเวลาเป็น 0.5 วินาที
+    TimeLabel.Text = "Skill Interval: " .. string.format("%.1f", skillTimer) .. "s"
+end)
+
+DecreaseButton.MouseButton1Click:Connect(function()
+    if skillTimer > 0.5 then
+        skillTimer = skillTimer - 0.5  -- ลดเวลาเป็น 0.5 วินาที
+        TimeLabel.Text = "Skill Interval: " .. string.format("%.1f", skillTimer) .. "s"
+    end
+end)
+
+-- ฟังก์ชันลบ GUI
+DestroyButton.MouseButton1Click:Connect(function()
+    -- ทำอนิเมชันให้ปุ่ม Destroy ก่อนจะทำลาย GUI
+    local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Circular, Enum.EasingDirection.Out)
+    local goal = {BackgroundColor3 = Color3.fromRGB(0, 0, 0)}
+    local tween = TweenService:Create(DestroyButton, tweenInfo, goal)
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        -- ทำลาย GUI ทั้งหมด
+        ScreenGui:Destroy()  -- ลบ ScreenGui ทิ้ง
+        print("GUI Destroyed!")
+    end)
+end)
