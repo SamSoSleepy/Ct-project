@@ -224,7 +224,7 @@ local function populateSkillMenu()
     SkillMenuFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
 end
 
--- เมื่อกดปุ่ม Select Skill จะเปิดเมนู
+-- แสดง/ซ่อนเมนูเลือกสกิล
 SkillMenuButton.MouseButton1Click:Connect(function()
     SkillMenuFrame.Visible = not SkillMenuFrame.Visible
     if SkillMenuFrame.Visible then
@@ -232,15 +232,53 @@ SkillMenuButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- เริ่ม/หยุดการใช้สกิล
+StartButton.MouseButton1Click:Connect(function()
+    if CurrentSkill == "" then return end
+
+    isSkillActive = not isSkillActive
+    if isSkillActive then
+        StartButton.Text = "Stop " .. CurrentSkill
+        skillCoroutine = coroutine.create(function()
+            while isSkillActive do
+                local args = {[1] = ReplicatedStorage:WaitForChild("PlayerAbilities"):FindFirstChild(CurrentSkill)}
+                if args[1] then
+                    ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Ability"):FireServer(unpack(args))
+                end
+                wait(skillTimer)
+            end
+        end)
+        coroutine.resume(skillCoroutine)
+    else
+        StartButton.Text = "Start " .. CurrentSkill
+        if skillCoroutine then
+            coroutine.close(skillCoroutine)
+            skillCoroutine = nil
+        end
+    end
+end)
+
+-- ปรับเวลาเพิ่ม/ลด
+IncreaseButton.MouseButton1Click:Connect(function()
+    skillTimer = skillTimer + 1
+    TimeLabel.Text = string.format("Skill Interval: %.1fs", skillTimer)
+end)
+
+DecreaseButton.MouseButton1Click:Connect(function()
+    skillTimer = math.max(skillTimer - 1, 0)
+    TimeLabel.Text = string.format("Skill Interval: %.1fs", skillTimer)
+end)
+
+-- ลบ GUI
+DestroyButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
 -- ปิดเมนูเมื่อกดที่ปุ่มซ่อน
 HideButton.MouseButton1Click:Connect(function()
     MainFrame.Visible = not MainFrame.Visible
 end)
 
--- ปุ่มทำลาย GUI
-DestroyButton.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
-end)
 
 -- เพิ่มกล่องข้อความ Sam_SSS ที่มุมขวาล่างของ GUI
 local SamSSSLabel = Instance.new("TextLabel")
