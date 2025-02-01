@@ -1,0 +1,307 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CoreGui = game:GetService("CoreGui")
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local StartButton = Instance.new("TextButton")
+local IncreaseButton = Instance.new("TextButton")
+local DecreaseButton = Instance.new("TextButton")
+local TimeLabel = Instance.new("TextLabel")
+local DestroyButton = Instance.new("TextButton")
+local SkillMenuButton = Instance.new("TextButton")
+local SkillMenuFrame = Instance.new("ScrollingFrame")
+local ClassItemsFrame = Instance.new("ScrollingFrame")  -- แทบเลื่อนสำหรับ ClassItems
+local ClassNameTextBox = Instance.new("TextBox")  -- กล่องข้อความสำหรับแสดงชื่อ ClassItem
+
+local CurrentSkill = ""
+local isSkillActive = false
+local skillTimer = 1.0
+local skillCoroutine = nil
+
+local selectedClassID = nil  -- ตัวแปรสำหรับเก็บค่า ClassID ที่เลือก
+
+-- ตั้งค่า GUI
+ScreenGui.Name = "CustomSkillGui"
+ScreenGui.Parent = CoreGui
+
+-- **ขยาย Frame พื้นหลังไปทางขวา**
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 480, 0, 200)  -- ขยายขึ้นอีกนิด
+MainFrame.Position = UDim2.new(0.8, 0, 0.5, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+-- ปุ่มปิด GUI (X)
+DestroyButton.Parent = ScreenGui
+DestroyButton.Size = UDim2.new(0, 35, 0, 35)
+DestroyButton.Position = UDim2.new(1, -45, 0, 10)
+DestroyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+DestroyButton.Text = "X"
+DestroyButton.TextSize = 14
+DestroyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- **ปุ่มซ่อน GUI** (ปุ่มที่มีเครื่องหมาย "-")
+local HideButton = Instance.new("TextButton")
+HideButton.Parent = ScreenGui
+HideButton.Size = UDim2.new(0, 35, 0, 35)
+HideButton.Position = UDim2.new(1, -90, 0, 10)
+HideButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+HideButton.Text = "-"
+HideButton.TextSize = 14
+HideButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- ปุ่มเริ่ม/หยุดสกิล
+StartButton.Parent = MainFrame
+StartButton.Size = UDim2.new(0, 200, 0, 30)
+StartButton.Position = UDim2.new(0, 15, 0, 10)
+StartButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+StartButton.Text = "Select Skill"
+StartButton.TextSize = 14
+StartButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- **ปุ่ม Give Class** (ให้เป็นปุ่มที่ทำการส่งค่า ClassID)
+local GiveClassButton = Instance.new("TextButton")
+GiveClassButton.Parent = MainFrame
+GiveClassButton.Size = UDim2.new(0, 140, 0, 30)
+GiveClassButton.Position = UDim2.new(0, 220, 0, 10)
+GiveClassButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+GiveClassButton.Text = "Give Class"
+GiveClassButton.TextSize = 14
+GiveClassButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- **แทบเลื่อนสำหรับ ClassItems**
+ClassItemsFrame.Parent = MainFrame
+ClassItemsFrame.Size = UDim2.new(0, 200, 0, 60)
+ClassItemsFrame.Position = UDim2.new(0, 220, 0, 50)
+ClassItemsFrame.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+ClassItemsFrame.ScrollBarThickness = 5
+ClassItemsFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+-- **กล่องข้อความแสดง ClassName**
+ClassNameTextBox.Parent = MainFrame
+ClassNameTextBox.Size = UDim2.new(0, 200, 0, 30)
+ClassNameTextBox.Position = UDim2.new(0, 220, 0, 120)  -- วางไว้ใต้ ClassItemsFrame
+ClassNameTextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ClassNameTextBox.Text = ""  -- เริ่มต้นให้เป็นค่าว่าง
+ClassNameTextBox.TextSize = 14
+ClassNameTextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- ฟังก์ชันเพิ่มปุ่ม ClassItems
+local function populateClassItems()
+    -- ลบปุ่มเก่าออกจาก ClassItemsFrame
+    for _, button in ipairs(ClassItemsFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            button:Destroy()
+        end
+    end
+
+    -- ดึงข้อมูล ClassItems จาก ReplicatedStorage
+    local classItems = ReplicatedStorage:WaitForChild("Items"):WaitForChild("ClassItems"):GetChildren()
+    if #classItems == 0 then
+        warn("No class items found in ReplicatedStorage")
+    end
+
+    local yOffset = 0
+
+    -- เพิ่มปุ่มสำหรับ ClassItem
+    for _, classItem in ipairs(classItems) do
+        local classButton = Instance.new("TextButton")
+        classButton.Parent = ClassItemsFrame
+        classButton.Size = UDim2.new(0, 200, 0, 30)
+        classButton.Position = UDim2.new(0, 0, 0, yOffset)
+        classButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+        classButton.Text = classItem.Name
+        classButton.TextSize = 14
+        classButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        
+        -- เมื่อคลิกเลือก ClassItem
+        classButton.MouseButton1Click:Connect(function()
+            -- กำหนดค่าของ ClassID ที่เลือก
+            selectedClassID = classItem:FindFirstChild("ClassID") and classItem.ClassID.Value or nil
+            -- อัพเดทข้อความใน TextBox
+            ClassNameTextBox.Text = classItem.Name  -- แสดงชื่อที่เลือกในกล่องข้อความ
+        end)
+
+        yOffset = yOffset + 35
+    end
+
+    -- อัพเดทขนาดของแทบเลื่อนตามจำนวนปุ่มที่เพิ่ม
+    ClassItemsFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+end
+
+-- เรียกใช้ฟังก์ชัน populateClassItems ทันทีเมื่อ GUI ถูกสร้าง
+populateClassItems()
+
+-- เมื่อกดปุ่ม Give Class จะทำการส่งค่า ClassID ไป
+GiveClassButton.MouseButton1Click:Connect(function()
+    if selectedClassID then
+        local args = {
+            [1] = "CombatStyle",  -- เปลี่ยนชื่อที่คุณต้องการ
+            [2] = selectedClassID
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StatsChange"):FireServer(unpack(args))
+    else
+        warn("Please select a ClassItem first!")
+    end
+end)
+
+-- ปุ่มเพิ่มเวลา
+IncreaseButton.Parent = MainFrame
+IncreaseButton.Size = UDim2.new(0, 95, 0, 30)
+IncreaseButton.Position = UDim2.new(0, 15, 0, 50)
+IncreaseButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+IncreaseButton.Text = "+ Time"
+IncreaseButton.TextSize = 14
+IncreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มลดเวลา
+DecreaseButton.Parent = MainFrame
+DecreaseButton.Size = UDim2.new(0, 95, 0, 30)
+DecreaseButton.Position = UDim2.new(0, 120, 0, 50)
+DecreaseButton.BackgroundColor3 = Color3.fromRGB(200, 0, 100)
+DecreaseButton.Text = "- Time"
+DecreaseButton.TextSize = 14
+DecreaseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- แสดงเวลาปัจจุบัน
+TimeLabel.Parent = MainFrame
+TimeLabel.Size = UDim2.new(0, 200, 0, 30)
+TimeLabel.Position = UDim2.new(0, 15, 0, 90)
+TimeLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TimeLabel.Text = string.format("Skill Interval: %.1fs", skillTimer)
+TimeLabel.TextSize = 14
+TimeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- ปุ่มเลือกสกิล
+SkillMenuButton.Parent = MainFrame
+SkillMenuButton.Size = UDim2.new(0, 200, 0, 30)
+SkillMenuButton.Position = UDim2.new(0, 15, 0, 130)
+SkillMenuButton.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+SkillMenuButton.Text = "Select Skill"
+SkillMenuButton.TextSize = 14
+SkillMenuButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+-- เมนูเลือกสกิล
+SkillMenuFrame.Parent = MainFrame
+SkillMenuFrame.Size = UDim2.new(0, 200, 0, 90)
+SkillMenuFrame.Position = UDim2.new(0, 15, 0, 170)
+SkillMenuFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SkillMenuFrame.Visible = false
+SkillMenuFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+SkillMenuFrame.ScrollBarThickness = 5
+
+-- ฟังก์ชันเพิ่มปุ่มเลือกสกิล
+local function populateSkillMenu()
+    for _, skill in ipairs(SkillMenuFrame:GetChildren()) do
+        if skill:IsA("TextButton") then
+            skill:Destroy()
+        end
+    end
+
+    local abilities = ReplicatedStorage:WaitForChild("PlayerAbilities"):GetChildren()
+    local yOffset = 0
+
+    for _, ability in ipairs(abilities) do
+        local skillButton = Instance.new("TextButton")
+        skillButton.Parent = SkillMenuFrame
+        skillButton.Size = UDim2.new(0, 200, 0, 30)
+        skillButton.Position = UDim2.new(0, 0, 0, yOffset)
+        skillButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+        skillButton.Text = ability.Name
+        skillButton.TextSize = 14
+        skillButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        
+        skillButton.MouseButton1Click:Connect(function()
+            CurrentSkill = ability.Name
+            StartButton.Text = "Start " .. CurrentSkill
+            SkillMenuFrame.Visible = false
+        end)
+
+        yOffset = yOffset + 35
+    end
+
+    SkillMenuFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+end
+
+-- แสดง/ซ่อนเมนูเลือกสกิล
+SkillMenuButton.MouseButton1Click:Connect(function()
+    SkillMenuFrame.Visible = not SkillMenuFrame.Visible
+    if SkillMenuFrame.Visible then
+        populateSkillMenu()
+    end
+end)
+
+-- เริ่ม/หยุดการใช้สกิล
+StartButton.MouseButton1Click:Connect(function()
+    if CurrentSkill == "" then return end
+
+    isSkillActive = not isSkillActive
+    if isSkillActive then
+        StartButton.Text = "Stop " .. CurrentSkill
+        skillCoroutine = coroutine.create(function()
+            while isSkillActive do
+                local args = {[1] = ReplicatedStorage:WaitForChild("PlayerAbilities"):FindFirstChild(CurrentSkill)}
+                if args[1] then
+                    ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Ability"):FireServer(unpack(args))
+                end
+                wait(skillTimer)
+            end
+        end)
+        coroutine.resume(skillCoroutine)
+    else
+        StartButton.Text = "Start " .. CurrentSkill
+        if skillCoroutine then
+            coroutine.close(skillCoroutine)
+            skillCoroutine = nil
+        end
+    end
+end)
+
+-- ปรับเวลาเพิ่ม/ลด
+IncreaseButton.MouseButton1Click:Connect(function()
+    skillTimer = skillTimer + 1
+    TimeLabel.Text = string.format("Skill Interval: %.1fs", skillTimer)
+end)
+
+DecreaseButton.MouseButton1Click:Connect(function()
+    skillTimer = math.max(skillTimer - 1, 0)
+    TimeLabel.Text = string.format("Skill Interval: %.1fs", skillTimer)
+end)
+
+-- ลบ GUI
+DestroyButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- ปิดเมนูเมื่อกดที่ปุ่มซ่อน
+HideButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+
+-- เพิ่มกล่องข้อความ Sam_SSS ที่มุมขวาล่างของ GUI
+local SamSSSLabel = Instance.new("TextLabel")
+SamSSSLabel.Parent = MainFrame
+SamSSSLabel.Size = UDim2.new(0, 100, 0, 30)  -- ขนาดของกล่องข้อความ
+SamSSSLabel.Position = UDim2.new(1, -110, 1, -40)  -- ขวาล่างของ GUI
+SamSSSLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+SamSSSLabel.Text = "script by SamSSS"
+SamSSSLabel.TextSize = 16
+SamSSSLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- เปิดใช้งาน TextScaled เพื่อให้ข้อความขนาดเล็กลงอัตโนมัติเมื่อเกินขอบกล่อง
+SamSSSLabel.TextScaled = true
+
+-- เพิ่มกล่องข้อความที่มุมซ้ายของ GUI
+local LeftLabel = Instance.new("TextLabel")
+LeftLabel.Parent = MainFrame
+LeftLabel.Size = UDim2.new(0, 50, 0, 20)  -- ขนาดของกล่องข้อความ
+LeftLabel.Position = UDim2.new(0, 10, 1, -30)  -- ตำแหน่งมุมซ้ายล่างของ GUI
+LeftLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LeftLabel.Text = "Skyventure"
+LeftLabel.TextSize = 16
+LeftLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- เปิดใช้งาน TextScaled เพื่อให้ข้อความขนาดเล็กลงอัตโนมัติเมื่อเกินขอบกล่อง
+LeftLabel.TextScaled = true
