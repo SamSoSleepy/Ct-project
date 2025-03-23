@@ -1,0 +1,110 @@
+local CollectionService = game:GetService("CollectionService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local autoCollectEnabled = false -- ตัวแปรเปิด/ปิดระบบ
+
+local function toggleAutoCollect()
+    autoCollectEnabled = not autoCollectEnabled
+    print("Auto Collect Airdrop: " .. (autoCollectEnabled and "Enabled" or "Disabled"))
+    if autoCollectEnabled then
+        processAllAirdrops()
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.P then -- กดปุ่ม P เพื่อเปิด/ปิด
+        toggleAutoCollect()
+    end
+end)
+
+local function triggerPrompt(prompt)
+    if prompt and prompt:IsA("ProximityPrompt") then
+        while not prompt.Enabled do
+            task.wait(0.1)
+        end
+        task.wait(0.5)
+        fireproximityprompt(prompt)
+    end
+end
+
+local function teleportAndTrigger(model)
+    if not model:IsA("Model") then return end
+    
+    task.wait(0.5)
+    local primaryPart = model:FindFirstChild("PrimaryPart") or model:FindFirstChild("Body")
+    if primaryPart then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = primaryPart.CFrame + Vector3.new(0, 3, 0)
+                task.wait(0.5) -- รอให้วาร์ปเสร็จ
+                
+                local prompt = primaryPart:FindFirstChild("PROMPT")
+                if prompt then
+                    triggerPrompt(prompt)
+                end
+            end
+        end
+    end
+end
+
+local function processAllAirdrops()
+    while autoCollectEnabled do
+        local foundAirdrop = false
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj.Name == "AirdropBOX" then
+                teleportAndTrigger(obj)
+                foundAirdrop = true
+                task.wait(1)
+            end
+        end
+        if not foundAirdrop then
+            break
+        end
+    end
+end
+
+local function addHighlight(model)
+    if not model:IsA("Model") then return end
+    
+    local highlight = Instance.new("Highlight")
+    highlight.Parent = model
+    highlight.FillColor = Color3.fromRGB(255, 215, 0)
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    
+    if autoCollectEnabled then
+        teleportAndTrigger(model)
+    end
+end
+
+local function monitorAirdrops()
+    local basePath = workspace:FindFirstChild("Fields")
+    if not basePath then return end
+    
+    basePath = basePath:FindFirstChild("World")
+    if not basePath then return end
+    
+    basePath = basePath:FindFirstChild("Traps")
+    if not basePath then return end
+    
+    for _, town in ipairs(basePath:GetChildren()) do
+        if town:IsA("Folder") and town.Name:match("Town%d+AirDrop") then
+            town.ChildAdded:Connect(function(child)
+                if child:IsA("Folder") then
+                    child.ChildAdded:Connect(function(model)
+                        if model:IsA("Model") and model.Name == "AirdropBOX" then
+                            task.wait(0.5)
+                            addHighlight(model)
+                            teleportAndTrigger(model)
+                        end
+                    end)
+                end
+            end)
+        end
+    end
+end
+
+monitorAirdrops()
+processAllAirdrops()
